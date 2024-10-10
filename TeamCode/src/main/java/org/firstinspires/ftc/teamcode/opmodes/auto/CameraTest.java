@@ -18,7 +18,8 @@ import static org.firstinspires.ftc.teamcode.commands.PropDetection.*;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.*;
 import org.firstinspires.ftc.teamcode.commands.*;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.*;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.old.DriveConstants;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.old.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.openftc.easyopencv.*;
