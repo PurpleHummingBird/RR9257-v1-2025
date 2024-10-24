@@ -13,14 +13,15 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.MecanumDrive;
 public class RedLeft extends LinearOpMode {
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        Pose2d startPose = new Pose2d(-40, -60, Math.toRadians(180));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
         double timeToDropBlock = 0.5;
         double timeToRotateArm = 1.0;
         double timeToGrabBlock = 0.5;
 
         Actions.runBlocking(new SequentialAction(
-                drive.actionBuilder(new Pose2d(-40, -60, Math.toRadians(90)))
+                drive.actionBuilder(startPose)
                         .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(-135))
                         //open claw
                         .waitSeconds(timeToDropBlock)
@@ -63,8 +64,6 @@ public class RedLeft extends LinearOpMode {
 
 
                         .strafeToLinearHeading(new Vector2d(-40, -60), Math.toRadians(90))
-                        //extend arm
-                        .waitSeconds(timeToRotateArm)
 
                         .build()
                 )

@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.qualcomm.robotcore.hardware.*;
 
@@ -7,37 +11,44 @@ import org.firstinspires.ftc.teamcode.commands.*;
 
 public class Arm {
 
-    private Servo arm;
-    public static double armPos = 0;
-    private double open = 0, close = 0;
+    private Servo arm1, arm2;
+    private final double EXTENDED = 0.25;
+    private final double RETRACTED = 0.0;
 
-    State state;
-    private RunMode runMode;
-
-    public Arm(HardwareMap hardwareMap){
-        arm = hardwareMap.servo.get("arm");
-        //arm.setDirection(Servo.Direction.REVERSE);
-        arm.setPosition(0.49);
+    public Arm(HardwareMap hardwareMap) {
+        arm1 = hardwareMap.servo.get("arm1");
+        arm2 = hardwareMap.servo.get("arm2");
+        arm1.setPosition(RETRACTED);
+        arm2.setPosition(RETRACTED);
     }
 
-    public void intake() {
-        arm.setPosition(0.51); //this is the resting position
+    public void extend() {
+        arm1.setPosition(EXTENDED);
+        arm2.setPosition(EXTENDED);
     }
 
-    public void traveling() {
-        arm.setPosition(0.49); //a tiny bit up while traveling to avoid getting stuck
+    public void retract() {
+        arm1.setPosition(RETRACTED);
+        arm2.setPosition(RETRACTED);
     }
 
-    public void deposit() {
-        arm.setPosition(0.66); //all the way down to depositing position; should be PARALLEL TO BACKDROP
+    //Roadrunner below here
+
+    public class SetArmPosition implements Action {
+        private long startTime;
+        private long endTime;
+        public SetArmPosition(double position, double duration) {
+            arm1.setPosition(position);
+            arm2.setPosition(position);
+            startTime = System.currentTimeMillis();
+            endTime = startTime + (int)(duration * 1000);
+        }
+
+        public boolean run(@NonNull TelemetryPacket packet) {
+            return (System.currentTimeMillis() < endTime);
+        }
     }
 
-    public void setIntakePosition(double num) {
-        arm.setPosition(num);
-    }
-
-
-    public Servo getArm() {
-        return arm;
-    }
+    public Action extendAction() {return new SetArmPosition(EXTENDED, 1.0); }
+    public Action retractAction() {return new SetArmPosition(RETRACTED, 1.0); }
 }

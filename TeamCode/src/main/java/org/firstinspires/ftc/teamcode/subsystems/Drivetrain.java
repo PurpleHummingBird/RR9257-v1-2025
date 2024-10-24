@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.qualcomm.robotcore.hardware.*;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.old.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.MecanumDrive;
 
 public class Drivetrain implements Subsystem {
-    public static SampleMecanumDrive drive;
+    public static MecanumDrive drive;
     private DcMotorEx FL, BL, FR, BR;
     double y, x, rx, FLPower, BLPower, FRPower, BRPower, heading, rotX, rotY;
     private RevIMU imu;
@@ -19,7 +20,7 @@ public class Drivetrain implements Subsystem {
     }
 
     public Drivetrain(HardwareMap hardwareMap) {
-        drive = new SampleMecanumDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0)); //drive variable is never used
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");

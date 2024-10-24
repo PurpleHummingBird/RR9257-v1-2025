@@ -1,65 +1,66 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.roadrunner.drive.MecanumDrive;
 
 @Autonomous(name = "BlueLeft")
 public class BlueLeft extends LinearOpMode {
-        public DcMotorEx BL;
-        public DcMotorEx BR;
-        public DcMotorEx FL;
-        public DcMotorEx FR;
+    @Override
+    public void runOpMode() {
+        Pose2d startPose = new Pose2d(-55, 60, Math.toRadians(0));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
-        /*private int leftBack;
-        private int rightBack;
-        private int leftFront;
-        private int rightFront;*/
-        @Override
-        public void runOpMode() {
-            BL = (DcMotorEx) hardwareMap.dcMotor.get("backLeft");
-            BR = (DcMotorEx) hardwareMap.dcMotor.get("backRight");
-            FL = (DcMotorEx) hardwareMap.dcMotor.get("frontLeft");
-            FR = (DcMotorEx) hardwareMap.dcMotor.get("frontRight");
+        double timeToDropBlock = 0.5;
+        double timeToRotateArm = 1.0;
+        double timeToGrabBlock = 0.5;
 
-            FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-            //backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            //backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            //backLeft.setDirection(DcMotor.Direction.REVERSE);
-            //backRight.setDirection(DcMotor.Direction.FORWARD);
-            FL.setDirection(DcMotor.Direction.REVERSE);
-            FR.setDirection(DcMotor.Direction.FORWARD);
+        Actions.runBlocking(new SequentialAction(
+                drive.actionBuilder(startPose)
+                        .strafeToLinearHeading(new Vector2d(55, 55), Math.toRadians(45))
+                        //open claw
+                        .waitSeconds(timeToDropBlock)
 
 
-            waitForStart();
-            ElapsedTime timer = new ElapsedTime();
+                        .strafeToLinearHeading(new Vector2d(-48, 45), Math.toRadians(-90))
+                        //extend arm
+                        .waitSeconds(timeToRotateArm)
+                        //close claw
+                        .waitSeconds(timeToGrabBlock)
+                        //retract arm
+                        .waitSeconds(timeToRotateArm)
 
-            int time2 = 300;
-            timer = new ElapsedTime();
-            while (timer.milliseconds() <= time2) {
-                //backLeft.setPower(-1);
-                //backRight.setPower(1);
-                FL.setPower(-1);
-                FR.setPower(1);
-            }
-            int time3 = 600;
-            timer = new ElapsedTime();
-            while (timer.milliseconds() <= time3) {
-                //backLeft.setPower(1);
-               // backRight.setPower(1);
-                FL.setPower(1);
-                FR.setPower(1);
-            }
 
-        }
+                        .strafeToLinearHeading(new Vector2d(55, 55), Math.toRadians(45))
+                        //open claw
+                        .waitSeconds(timeToDropBlock)
+
+
+                        .strafeToLinearHeading(new Vector2d(-59, 45), Math.toRadians(-90))
+                        .waitSeconds(timeToRotateArm)
+                        //extend arm
+                        .waitSeconds(timeToGrabBlock)
+                        //close claw
+                        .waitSeconds(timeToRotateArm)
+                        //retract arm
+
+
+                        .strafeToLinearHeading(new Vector2d(55, 55), Math.toRadians(45))
+                        //open claw
+                        .waitSeconds(timeToDropBlock)
+
+
+                        .strafeToLinearHeading(new Vector2d(-40, 55), Math.toRadians(30))
+                        .strafeToLinearHeading(new Vector2d(-50, 26), Math.toRadians(180))
+
+                        .build()
+                )
+        );
     }
+}
+

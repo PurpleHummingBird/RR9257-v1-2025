@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.qualcomm.robotcore.hardware.*;
 
@@ -8,34 +12,42 @@ import org.firstinspires.ftc.teamcode.commands.*;
 public class Claw {
 
     private Servo claw;
-    private double open = 0, close = 0;
+    private final double CLOSED = 0.1;
+    private final double OPEN = 0.2;
 
-
-
-    State state;
-    private RunMode runMode;
-
-    public Claw(HardwareMap hardwareMap){
+    public Claw(HardwareMap hardwareMap) {
         claw = hardwareMap.servo.get("claw");
-        //arm.setDirection(Servo.Direction.REVERSE);   //do we need to reverse this???
-        claw.setPosition(0.5);
+        claw.setPosition(CLOSED);
     }
 
-    public void releaseOne() {
-        //SLIGHTLY open the claw, just to let the first pixel out
-        //claw.setPosition(0.01);    //a little bit more than 0
+    //Manual below here
+
+    public void close() {
+        claw.setPosition(CLOSED);
     }
 
-    public void releaseTwo() {
-        //COMPLETELY open the claw, even if there are two in the outtake at once
-        //claw.setPosition(0.02);    //quite a bit more than 0
+    public void open() {
+        claw.setPosition(OPEN);
     }
 
-    public void closeClaw() {
-        claw.setPosition(0);
+
+    //Roadrunner below here
+
+    public class SetClawPosition implements Action {
+        private long startTime;
+        private long endTime;
+        public SetClawPosition(double position, double duration) {
+            claw.setPosition(position);
+            startTime = System.currentTimeMillis();
+            endTime = startTime + (int)(duration * 1000);
+        }
+
+        public boolean run(@NonNull TelemetryPacket packet) {
+            return (System.currentTimeMillis() < endTime);
+        }
     }
 
-    public Servo getClaw() {
-        return claw;
-    }
+    public Action closeAction() {return new SetClawPosition(CLOSED, 0.3); }
+    public Action openAction() {return new SetClawPosition(OPEN, 0.3); }
+
 }
