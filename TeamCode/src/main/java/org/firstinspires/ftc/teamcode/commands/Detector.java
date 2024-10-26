@@ -4,12 +4,9 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import org.firstinspires.ftc.robotcore.external.*;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.opencv.core.*;
 import org.opencv.imgproc.*;
 import org.openftc.easyopencv.*;
-
-import java.util.*;
 
 public class Detector extends OpenCvPipeline {
     Telemetry telemetry;

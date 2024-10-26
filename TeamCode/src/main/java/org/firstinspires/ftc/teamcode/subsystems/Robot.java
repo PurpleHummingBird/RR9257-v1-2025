@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.teamcode.commands.State.*;
@@ -7,19 +8,22 @@ import static org.firstinspires.ftc.teamcode.commands.State.*;
 //import org.firstinspires.ftc.robotcore.external.*;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.State;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.MecanumDrive;
 
 public class Robot {
 
-    public Drivetrain drivetrain;
+    public MecanumDrive drive;
     public Arm arm;
     public Claw claw;
+    public Slides slides;
     Telemetry telemetry;
 
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry){
+    public Robot(HardwareMap hardwareMap, Pose2d pos, Telemetry telemetry){
         this.telemetry = telemetry;
 
-        drivetrain = new Drivetrain(hardwareMap);
+        drive = new MecanumDrive(hardwareMap, pos);
         arm = new Arm(hardwareMap);
         claw = new Claw(hardwareMap);
+        slides = new Slides(hardwareMap);
     }
 }

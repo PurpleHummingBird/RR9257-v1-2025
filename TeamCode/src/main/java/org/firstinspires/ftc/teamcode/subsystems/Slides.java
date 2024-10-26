@@ -7,13 +7,14 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Slides {
     private final int ticksPerRotation = 100; //placeholder
     private final double rotationsForExtension = 5.5; //placeholder
     private DcMotor motor;
 
-    public Slides() {
+    public Slides(HardwareMap hardwareMap) {
         motor = hardwareMap.get(DcMotor.class, "liftMotor");
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }

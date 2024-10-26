@@ -41,8 +41,7 @@ public abstract class CameraTest extends LinearOpMode {
         telemetry.addLine("Status: Initializing");
         telemetry.update();
 
-        bot = new Robot(hardwareMap, telemetry);
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        bot = new Robot(hardwareMap, new Pose2d(0, 0, 0), telemetry);
 
         propDetection = new PropDetection();
 
